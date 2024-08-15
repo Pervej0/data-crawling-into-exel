@@ -2,6 +2,23 @@ const fs = require("fs");
 const XLSX = require("xlsx");
 let allData = [];
 
+// const detailsUrl = "https://efdms.nbr.gov.bd/dashboard/device/view/20866681";
+
+// const token =
+//   "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ6YW1hbiIsImlhdCI6MTcyMzcxMzQ2MCwiZXhwIjoxNzIzNzk5ODYwfQ.yBCgBXDG7ey8kjpgpMLxLas1PWTB45d3sdWj100Uxp-MNV7c5Ro8YzOV8tHVJ6K9oLlXq-lyZ5xebn7QA1lxQQ";
+
+// fetch(detailsUrl, {
+//   method: "GET",
+//   headers: {
+//     Authorization: `Bearer ${token}`,
+//   },
+// })
+//   .then((response) => response.json())
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((error) => console.error("Error:", error));
+
 const devicesCount = () => {
   for (let i = 1; i < 440; i++) {
     const ConvertNum = String(i);
@@ -54,4 +71,4 @@ const devicesCount = () => {
   }, 20000);
 };
 
-devicesCount();
+// devicesCount();
