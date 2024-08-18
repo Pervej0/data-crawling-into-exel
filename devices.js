@@ -1,6 +1,8 @@
-const fs = require("fs");
-const XLSX = require("xlsx");
-require("dotenv").config();
+import dsnCount from "./dsn.js";
+import convertToExel from "./utils/convertToExel.js";
+import convertToJson from "./utils/convertToJson.js";
+import batchRequest from "batch-request-js";
+import "dotenv/config";
 let allData = [];
 let devicesId = [];
 let allDevicesId = [];
@@ -9,7 +11,7 @@ const devicesCount = () => {
   let url;
   const token = process.env.TOK;
   console.log(token, process.env.URL, "ccc");
-  for (let i = 1; i < 20; i++) {
+  for (let i = 1; i < 440; i++) {
     const ConvertNum = String(i);
     url = `${process.env.URL}/services/api/inventory/devices?page=${ConvertNum}&&size=50`;
 
@@ -22,11 +24,11 @@ const devicesCount = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(i);
-        devicesId = data?.content.map((item) => item.id);
-        devicesId.map((id) => allDevicesId.push(id));
+        // allData.push(data.content);
 
-        // console.log(data.content);
-        // console.log(i);
+        // For DSN
+        devicesId = data.content.map((item) => item.id);
+        devicesId.map((id) => allDevicesId.push(id));
       })
       .catch((error) => console.error("Error:", error));
   }
@@ -34,41 +36,33 @@ const devicesCount = () => {
   //   return;
   // }
   return setTimeout(() => {
-    exports.allDevicesId = allDevicesId;
-
+    // exports.allDevicesId = allDevicesId;
     // json formatted data
-    // const jsonString = JSON.stringify(allData, null, 2);
-    // fs.writeFile("small-data.json", jsonString, (err) => {
-    //   if (err) {
-    //     console.error("Error writing JSON to file", err);
-    //   } else {
-    //     console.log("JSON file has been created successfully.");
-    //   }
-    // });
+    // convertToJson(allData, devices);
     // convert to excel
-    // if (allData.length > 0) {
-    //   const flattenedData = allData.flat();
-    //   // Convert the flattened array to a worksheet
-    //   const worksheet = XLSX.utils.json_to_sheet(flattenedData);
-    //   // Create a new workbook
-    //   const workbook = XLSX.utils.book_new();
-    //   // Append the worksheet to the workbook
-    //   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    //   // Export the Excel file
-    //   XLSX.writeFile(workbook, "nested_data.xlsx");
-    // }
+    // convertToExel(allData);
+
+    // Get DSN Data
+
+    dsnCount(allDevicesId);
   }, 20000);
 };
 
-// batch query for dsn retrieving
+devicesCount();
 
-// devicesCount();
-let stage = 1;
-for (let i = 0; i < 20000; i++) {
-  for (let j = 0; j < 20000 / 40; j++) {
-    console.log("Hello-", j);
-  }
-  setTimeout(() => {
-    console.log("======== STAGE ========: ", stage++);
-  }, 20000);
-}
+// batch query for dsn retrieving
+// let breakMoment = 21000 / 50;
+// let stage = 0;
+// for (let i = 0; i < 21000; i++) {
+//   console.log(i);
+//   if (breakMoment === i) {
+//     stage++;
+//     console.log("=========== Stage ===========", stage, breakMoment);
+//     breakMoment += breakMoment;
+//   }
+// }
+
+// setTimeout(() => {
+//   breakMoment += breakMoment;
+//   console.log("======== STAGE ========: ", stage++);
+// }, 20000);
