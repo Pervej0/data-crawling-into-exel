@@ -1,5 +1,5 @@
 import dsnCount from "./dsn.js";
-import convertToExel from "./utils/convertToExel.js";
+import convertToExel from "./utils/convertToExcel.js";
 import convertToJson from "./utils/convertToJson.js";
 import batchRequest from "batch-request-js";
 import "dotenv/config";
@@ -11,7 +11,7 @@ const devicesCount = () => {
   let url;
   const token = process.env.TOK;
   console.log(token, process.env.URL, "ccc");
-  for (let i = 1; i < 440; i++) {
+  for (let i = 1; i < 442; i++) {
     const ConvertNum = String(i);
     url = `${process.env.URL}/services/api/inventory/devices?page=${ConvertNum}&&size=50`;
 
@@ -25,7 +25,6 @@ const devicesCount = () => {
       .then((data) => {
         console.log(i);
         // allData.push(data.content);
-
         // For DSN
         devicesId = data.content.map((item) => item.id);
         devicesId.map((id) => allDevicesId.push(id));

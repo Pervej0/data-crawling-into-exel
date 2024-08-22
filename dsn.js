@@ -2,7 +2,8 @@ import batchRequest from "batch-request-js";
 import convertToJson from "./utils/convertToJson.js";
 import "dotenv/config";
 import { version } from "xlsx";
-import convertToExel from "./utils/convertToExel.js";
+import convertToExcel from "./utils/convertToExcel.js";
+
 const dsnCount = async (devicesId) => {
   // let DNS_URL = `${process.env.URL}//18648382`;
   const token = process.env.TOK;
@@ -39,8 +40,8 @@ const dsnCount = async (devicesId) => {
       bin: item.bin,
     };
   });
-  // console.log(dsnLists, "pp");
-  convertToExel(dsnLists, "dsn-list");
+
+  convertToExcel(dsnLists, "devices-22-08-24");
 };
 
 export default dsnCount;
