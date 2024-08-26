@@ -7,8 +7,8 @@ import dateFormatter from "./utils/dateFormatter.js";
 const dsnCount = async (devicesId) => {
   // let DNS_URL = `${process.env.URL}//18648382`;
   const token = process.env.TOK;
-  const request = (customerId) =>
-    fetch(`${process.env.URL}/services/api/inventory/devices/${customerId}`, {
+  const request = (id) =>
+    fetch(`${process.env.URL}/services/api/inventory/devices/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

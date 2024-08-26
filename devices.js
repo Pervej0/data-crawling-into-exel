@@ -4,47 +4,47 @@ import convertToJson from "./utils/convertToJson.js";
 import batchRequest from "batch-request-js";
 import "dotenv/config";
 let allData = [];
-let devicesId = [];
-let allDevicesId = [];
+// let allDevicesId = [];
 
-const devicesCount = () => {
-  let url;
+const devicesCount = async () => {
+  let url = `${process.env.URL}/services/api/inventory/devices?page=1&&size=10`;
   const token = process.env.TOK;
-  console.log(token, process.env.URL, "ccc");
-  for (let i = 1; i < 445; i++) {
-    const ConvertNum = String(i);
-    url = `${process.env.URL}/services/api/inventory/devices?page=${ConvertNum}&&size=50`;
-
-    fetch(url, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  let totalPages = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return data.totalPages;
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(i);
-        // allData.push(data.content);
-        // For DSN
-        devicesId = data.content.map((item) => item.id);
-        devicesId.map((id) => allDevicesId.push(id));
-      })
-      .catch((error) => console.error("Error:", error));
-  }
-  // if (allData.length < 1) {
-  //   return;
-  // }
-  return setTimeout(() => {
-    // exports.allDevicesId = allDevicesId;
-    // json formatted data
-    // convertToJson(allData, devices);
-    // convert to excel
-    // convertToExel(allData);
+    .catch((error) => console.error("Error:", error));
 
-    // Get DSN Data
+  // Batch Request
+  const records = Array(totalPages)
+    .fill(0)
+    .map((zero, i) => i);
 
-    dsnCount(allDevicesId);
-  }, 20000);
+  const request = (pageNumber) =>
+    fetch(
+      `${process.env.URL}/services/api/inventory/devices?page=${pageNumber}&&size=10`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then((response) => response.json());
+
+  const { error, data } = await batchRequest(records, request, {
+    batchSize: 500,
+    delay: 1000,
+  });
+  const devicesId = data
+    .map((cnt) => cnt.content.map((item) => item.id))
+    .flat();
+  dsnCount(devicesId);
 };
 
 devicesCount();
