@@ -7,3 +7,5 @@ const dateFormatter = () => {
   const formattedDate = `${year}-${month}-${day}`;
   return formattedDate;
 };
+
+export default dateFormatter;

@@ -11,7 +11,7 @@ const devicesCount = () => {
   let url;
   const token = process.env.TOK;
   console.log(token, process.env.URL, "ccc");
-  for (let i = 1; i < 442; i++) {
+  for (let i = 1; i < 445; i++) {
     const ConvertNum = String(i);
     url = `${process.env.URL}/services/api/inventory/devices?page=${ConvertNum}&&size=50`;
 
