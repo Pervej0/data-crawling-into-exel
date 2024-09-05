@@ -1,11 +1,9 @@
 import batchRequest from "batch-request-js";
-import convertToJson from "./utils/convertToJson.js";
 import "dotenv/config";
 import convertToExcel from "./utils/convertToExcel.js";
 import dateFormatter from "./utils/dateFormatter.js";
 
 const dsnCount = async (devicesId) => {
-  // let DNS_URL = `${process.env.URL}//18648382`;
   const token = process.env.TOK;
   const request = (id) =>
     fetch(`${process.env.URL}/services/api/inventory/devices/${id}`, {
@@ -17,10 +15,9 @@ const dsnCount = async (devicesId) => {
 
   const { error, data } = await batchRequest(devicesId, request, {
     batchSize: 500,
-    delay: 1000,
+    delay: 2000,
   });
 
-  // convertToJson(data, "devicesInfo");
   const dsnLists = data.map((item) => {
     return {
       id: item.id,
@@ -28,20 +25,23 @@ const dsnCount = async (devicesId) => {
       deviceNumber: item.deviceNumber,
       androidId: item.androidId,
       deviceTypeId: item.deviceTypeId,
-      model: item.model,
-      brand: item.brand,
       manufacturer: item.manufacturer,
       maxInvoiceChunk: item.maxInvoiceChunk,
       minInvoiceLevel: item.minInvoiceLevel,
       isActivated: item.isActivated,
       isInitiated: item.isInitiated,
       isLocked: item.isLocked,
-      store: item.store,
       bin: item.bin,
+      outletName: item.outlet.outletNameEn || outletNameBn,
+      outLetAddress: item.outlet.addressLine1 || item.outlet.addressLine2,
+      outletContact: item.outlet.mobile || item.outlet.phone,
+      officeName: item.office.officeNameEn || item.office.officeNameBn,
     };
   });
+
   const today = dateFormatter();
-  convertToExcel(dsnLists, `devices-${today}`);
+  await convertToExcel(dsnLists, `devices-${today}`);
+  // await convertToJson(dsnLists, `devices-${today}`);
 };
 
 export default dsnCount;

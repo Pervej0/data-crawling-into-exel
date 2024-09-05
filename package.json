@@ -1,5 +1,8 @@
 {
   "type": "module",
+  "scripts": {
+    "devices": "node devices.js"
+  },
   "dependencies": {
     "batch-request-js": "^2.0.2",
     "dotenv": "^16.4.5",

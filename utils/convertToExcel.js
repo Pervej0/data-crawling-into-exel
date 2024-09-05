@@ -1,6 +1,6 @@
 import XLSX from "xlsx";
 
-const convertToExcel = (allData, title) => {
+const convertToExcel = async (allData, title) => {
   if (allData.length > 0) {
     const flattenedData = allData.flat();
     // Convert the flattened array to a worksheet
@@ -10,7 +10,9 @@ const convertToExcel = (allData, title) => {
     // Append the worksheet to the workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     // Export the Excel file
-    XLSX.writeFile(workbook, `${title}.xlsx`);
+    await XLSX.writeFile(workbook, `${title}.xlsx`);
+
+    console.log("Excel File Created Successfully! 🙂");
   } else {
     throw new Error("No Data Found!");
   }

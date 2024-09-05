@@ -1,14 +1,13 @@
 import dsnCount from "./dsn.js";
-import convertToExel from "./utils/convertToExcel.js";
-import convertToJson from "./utils/convertToJson.js";
 import batchRequest from "batch-request-js";
 import "dotenv/config";
-let allData = [];
 // let allDevicesId = [];
 
 const devicesCount = async () => {
+  console.log("Please wait, File is downloading...");
   let url = `${process.env.URL}/services/api/inventory/devices?page=1&&size=10`;
   const token = process.env.TOK;
+
   let totalPages = await fetch(url, {
     method: "GET",
     headers: {
@@ -28,7 +27,7 @@ const devicesCount = async () => {
 
   const request = (pageNumber) =>
     fetch(
-      `${process.env.URL}/services/api/inventory/devices?page=${pageNumber}&&size=10`,
+      `${process.env.URL}/services/api/inventory/devices?page=${pageNumber}&&size=50`,
       {
         method: "GET",
         headers: {
@@ -39,8 +38,9 @@ const devicesCount = async () => {
 
   const { error, data } = await batchRequest(records, request, {
     batchSize: 500,
-    delay: 1000,
+    delay: 2000,
   });
+
   const devicesId = data
     .map((cnt) => cnt.content.map((item) => item.id))
     .flat();
@@ -48,20 +48,3 @@ const devicesCount = async () => {
 };
 
 devicesCount();
-
-// batch query for dsn retrieving
-// let breakMoment = 21000 / 50;
-// let stage = 0;
-// for (let i = 0; i < 21000; i++) {
-//   console.log(i);
-//   if (breakMoment === i) {
-//     stage++;
-//     console.log("=========== Stage ===========", stage, breakMoment);
-//     breakMoment += breakMoment;
-//   }
-// }
-
-// setTimeout(() => {
-//   breakMoment += breakMoment;
-//   console.log("======== STAGE ========: ", stage++);
-// }, 20000);
