@@ -39,8 +39,8 @@ const dsnCount = async (devicesId) => {
     };
   });
 
-  const today = dateFormatter();
-  await convertToExcel(dsnLists, `devices-${today}`);
+  const currentMoment = dateFormatter();
+  await convertToExcel(dsnLists, `devices-${currentMoment}`);
   // await convertToJson(dsnLists, `devices-${today}`);
 };
 

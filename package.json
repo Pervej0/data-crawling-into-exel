@@ -1,7 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "devices": "node devices.js"
+    "devices": "node devices.js",
+    "taxpayer": "node taxPayerList.js"
   },
   "dependencies": {
     "batch-request-js": "^2.0.2",

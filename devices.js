@@ -8,7 +8,7 @@ const devicesCount = async () => {
   let url = `${process.env.URL}/services/api/inventory/devices?page=1&&size=10`;
   const token = process.env.TOK;
 
-  let totalPages = await fetch(url, {
+  let totalItems = await fetch(url, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -21,7 +21,7 @@ const devicesCount = async () => {
     .catch((error) => console.error("Error:", error));
 
   // Batch Request
-  const records = Array(totalPages)
+  const records = Array(totalItems)
     .fill(0)
     .map((zero, i) => i);
 
